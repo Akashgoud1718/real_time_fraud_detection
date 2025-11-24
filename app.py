@@ -6,9 +6,8 @@ from datetime import datetime
 import hashlib
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key_here_change_this_in_production'
+app.secret_key = ''
 
-# Simple user storage (in production, use a proper database)
 USERS_FILE = 'users.json'
 
 def load_users():
@@ -18,11 +17,11 @@ def load_users():
             with open(USERS_FILE, 'r') as f:
                 return json.load(f)
         else:
-            # Return empty dict if file doesn't exist or is empty
+            
             return {}
     except (json.JSONDecodeError, Exception) as e:
         print(f"Error loading users: {e}")
-        # If there's any error reading the file, return empty dict
+        
         return {}
 
 def save_users(users):
@@ -118,15 +117,15 @@ def upload_file():
         
         if file and file.filename.endswith('.csv'):
             try:
-                # Read and process the CSV file
+                
                 df = pd.read_csv(file)
                 
-                # Basic validation for CSV structure
+                
                 if df.empty:
                     flash('The uploaded CSV file is empty', 'error')
                     return redirect(request.url)
                 
-                # Store the dataframe in session for results display
+                
                 session['uploaded_data'] = df.to_json()
                 session['filename'] = file.filename
                 
@@ -146,10 +145,10 @@ def process_results():
         return redirect(url_for('login'))
     
     try:
-        # Load the uploaded data
+        
         df = pd.read_json(session['uploaded_data'])
         
-        # Simulate fraud detection analysis
+        
         results = []
         total_transactions = len(df)
         high_risk_count = 0
@@ -157,25 +156,25 @@ def process_results():
         low_risk_count = 0
         
         for index, row in df.iterrows():
-            # Simulate fraud probability (in real app, this would come from your ML model)
+            
             if 'probability' in df.columns:
                 fraud_prob = float(row['probability'])
             elif 'fraud_probability' in df.columns:
                 fraud_prob = float(row['fraud_probability'])
             else:
-                # Generate simulated probability based on amount and other factors
+                
                 base_prob = 0.1
                 if 'amount' in df.columns:
                     amount = float(row['amount']) if pd.notna(row['amount']) else 0
-                    # Higher amounts have higher fraud probability
-                    amount_factor = min(amount / 5000, 0.8)  # Cap at 80%
+                    
+                    amount_factor = min(amount / 5000, 0.8)  
                     base_prob += amount_factor
                 
-                # Add some randomness for demo
+                
                 import random
                 fraud_prob = round(min(base_prob + random.uniform(0, 0.3), 0.99), 2)
             
-            # Determine risk level based on probability
+            
             if fraud_prob >= 0.7:
                 risk_level = "HIGH RISK"
                 alert_action = "🚨 DECLINE & BLOCK CARD"
@@ -189,13 +188,13 @@ def process_results():
                 alert_action = "✅ APPROVE"
                 low_risk_count += 1
             
-            # Get transaction details with fallbacks
+            
             transaction_id = row.get('transaction_id', f'TXN{index+1:04d}')
             amount = row.get('amount', 'N/A')
             merchant = row.get('merchant', row.get('merchant_name', 'Unknown'))
             location = row.get('location', row.get('merchant_location', 'Unknown'))
             
-            # Format amount if it's a number
+            
             try:
                 if amount != 'N/A':
                     amount = f"${float(amount):.2f}"
@@ -212,7 +211,7 @@ def process_results():
                 'alert_action': alert_action
             })
         
-        # Summary statistics
+        
         summary = {
             'total_transactions': total_transactions,
             'high_risk_count': high_risk_count,
@@ -237,12 +236,12 @@ def logout():
     flash('You have been logged out successfully', 'success')
     return redirect(url_for('login'))
 
-# Initialize the users file when the app starts
+
 @app.before_request
 def initialize_app():
     init_users_file()
 
 if __name__ == '__main__':
-    # Ensure the users file exists before starting
+    
     init_users_file()
     app.run(debug=True)

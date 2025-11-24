@@ -1,0 +1,11 @@
+﻿transaction_id,amount,merchant,location,probability
+TXN001,150,Amazon Online,New York,0.15
+TXN002,2500,Best Buy,California,0.85
+TXN003,75.5,Starbucks,Chicago,0.08
+TXN004,1200,Apple Store,New York,0.45
+TXN005,45,Walmart,Texas,0.12
+TXN006,3000,Luxury Jewelers,Florida,0.92
+TXN007,89.99,Target,Ohio,0.25
+TXN008,25,McDonald's,Illinois,0.05
+TXN009,1800,Electronics Store,Nevada,0.78
+TXN010,65,Costco,Arizona,0.11

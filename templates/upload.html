@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="upload-container">
+    <h2>Upload Transaction Data</h2>
+    <div class="upload-card">
+        <h3>📁 Upload CSV File</h3>
+        <p>Upload a CSV file containing transaction data. Expected columns:</p>
+        <ul>
+            <li><code>transaction_id</code> (optional)</li>
+            <li><code>amount</code> (optional)</li>
+            <li><code>merchant</code> (optional)</li>
+            <li><code>location</code> (optional)</li>
+            <li><code>probability</code> (optional - if not provided, will be calculated)</li>
+        </ul>
+        
+        <form method="POST" enctype="multipart/form-data" class="upload-form">
+            <div class="form-group">
+                <label for="file">Choose CSV file:</label>
+                <input type="file" id="file" name="file" accept=".csv" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Analyze for Fraud</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

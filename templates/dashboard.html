@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard">
+    <h2>Welcome to Fraud Detection System</h2>
+    <div class="dashboard-cards">
+        <div class="card">
+            <h3>📊 Upload Transactions</h3>
+            <p>Upload a CSV file with transaction data for fraud analysis</p>
+            <a href="{{ url_for('upload_file') }}" class="btn btn-primary">Upload CSV</a>
+        </div>
+        <div class="card">
+            <h3>🔍 View Results</h3>
+            <p>Check the latest fraud detection results and alerts</p>
+            <a href="{{ url_for('upload_file') }}" class="btn btn-secondary">View History</a>
+        </div>
+        <div class="card">
+            <h3>⚙️ System Info</h3>
+            <p>Real-time fraud detection with ML-powered analysis</p>
+            <span class="status-badge active">System Active</span>
+        </div>
+    </div>
+</div>
+{% endblock %}

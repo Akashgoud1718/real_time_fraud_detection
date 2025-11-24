@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="results-container">
+    <h2>Fraud Detection Results</h2>
+    
+    <!-- Summary Cards -->
+    <div class="summary-cards">
+        <div class="summary-card total">
+            <h3>Total Transactions</h3>
+            <p class="number">{{ summary.total_transactions }}</p>
+        </div>
+        <div class="summary-card high-risk">
+            <h3>High Risk</h3>
+            <p class="number">{{ summary.high_risk_count }} ({{ summary.high_risk_percent }}%)</p>
+        </div>
+        <div class="summary-card medium-risk">
+            <h3>Medium Risk</h3>
+            <p class="number">{{ summary.medium_risk_count }}</p>
+        </div>
+        <div class="summary-card low-risk">
+            <h3>Low Risk</h3>
+            <p class="number">{{ summary.low_risk_count }}</p>
+        </div>
+    </div>
+
+    <!-- Results Table -->
+    <div class="results-table-container">
+        <h3>Transaction Details - {{ summary.filename }}</h3>
+        <table class="results-table">
+            <thead>
+                <tr>
+                    <th>Transaction ID</th>
+                    <th>Amount</th>
+                    <th>Merchant</th>
+                    <th>Location</th>
+                    <th>Fraud Probability</th>
+                    <th>Risk Level</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for result in results %}
+                <tr class="risk-{{ result.risk_level|lower|replace(' ', '-') }}">
+                    <td>{{ result.transaction_id }}</td>
+                    <td>${{ result.amount }}</td>
+                    <td>{{ result.merchant }}</td>
+                    <td>{{ result.location }}</td>
+                    <td>
+                        <div class="probability-bar">
+                            <div class="probability-fill" style="width: {{ result.fraud_probability * 100 }} %"></div>
+                            <span class="probability-text">{{ result.fraud_probability }}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="risk-badge risk-{{ result.risk_level|lower|replace(' ', '-') }}">
+                            {{ result.risk_level }}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="action-badge">{{ result.alert_action }}</span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="action-buttons">
+        <a href="{{ url_for('upload_file') }}" class="btn btn-primary">Analyze Another File</a>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+</div>
+{% endblock %}
